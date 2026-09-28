@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>FileReady – Free File Requirements Checker & Fixer</title>
+    <meta name="description" content="Check file size, format, dimensions, aspect ratio and other requirements. Fix supported image issues and download a ready-to-upload file directly in your browser.">
+    <meta name="keywords" content="file requirements checker, image size checker, image dimension checker, file size checker, image compressor, image resizer, image converter, private file validator">
+    <meta name="author" content="FileReady">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://YOUR-DOMAIN.example/">
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="FileReady – Free File Requirements Checker & Fixer">
+    <meta property="og:description" content="Check and fix file requirements locally in your browser. Private, fast, and free.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://YOUR-DOMAIN.example/">
+    <meta property="og:site_name" content="FileReady">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FileReady – Free File Requirements Checker & Fixer">
+    <meta name="twitter:description" content="Upload, check requirements, fix supported issues, and download ready-to-upload files in your browser.">
+
+    <!-- Inline Favicon (SVG Data URI) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'%3E%3C/path%3E%3Cpolyline points='14 2 14 8 20 8'%3E%3C/polyline%3E%3Cpolyline points='9 15 11 17 15 13'%3E%3C/polyline%3E%3C/svg%3E">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "FileReady",
+      "url": "https://YOUR-DOMAIN.example/",
+      "description": "Browser-based File Requirements Checker & Fixer. Validate file sizes, dimensions, aspect ratios, formats, and auto-fix image issues completely offline/locally.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All modern web browsers",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <style>
+        /* CSS Variables & Theme Definitions */
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: #eff6ff;
+            --accent: #0284c7;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --muted: #64748b;
+            --success: #16a34a;
+            --success-bg: #f0fdf4;
+            --warning: #d97706;
+            --warning-bg: #fffbeb;
+            --error: #dc2626;
+            --error-bg: #fef2f2;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --border: #334155;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --primary-light: rgba(37, 99, 235, 0.15);
+            --success-bg: rgba(22, 163, 74, 0.15);
+            --warning-bg: rgba(217, 119, 6, 0.15);
+            --error-bg: rgba(220, 38, 38, 0.15);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        /* HARD OVERFLOW-PROOF GLOBAL RESETS */
+        html {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: var(--font);
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        img, svg, video, canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button, input, select, textarea {
+            font-family: inherit;
+            font-size: 1rem;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        p, h1, h2, h3, h4, h5, h6, span, div, label, li {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        /* CONTAINER DESIGN */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            box-sizing: border-box;
+        }
+
+        /* HEADER LAYOUT */
+        header {
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            width: 100%;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: var(--text);
+            text-decoration: none !important;
+            flex-shrink: 0;
+        }
+
+        .logo svg {
+            width: 26px;
+            height: 26px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            opacity: 0.85;
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            opacity: 1;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--border);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            text-decoration: none !important;
+            max-width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--border);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: #ffffff;
+        }
+
+        .btn-success:hover {
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            max-width: 100%;
+        }
+
+        .badge-privacy {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .badge-pass {
+            background-color: var(--success-bg);
+            color: var(--success);
+            border: 1px solid rgba(22, 163, 74, 0.3);
+        }
+
+        .badge-fail {
+            background-color: var(--error-bg);
+            color: var(--error);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            padding: 3.5rem 0 2.5rem;
+            text-align: center;
+            background: radial-gradient(circle at top, var(--primary-light) 0%, transparent 60%);
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin: 1rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--muted);
+            max-width: 680px;
+            margin: 0 auto 1.75rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            justify-content: center;
+            gap: 0.85rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        /* FLOW DIAGRAM */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--surface);
+            padding: 1.25rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+            flex-wrap: wrap;
+            box-sizing: border-box;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text);
+            min-width: 0;
+        }
+
+        .flow-arrow {
+            color: var(--muted);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* MAIN CHECKER CARD */
+        .main-checker {
+            padding: 1.5rem 0 3rem;
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .mode-toggle {
+            display: flex;
+            background-color: var(--bg);
+            padding: 0.35rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            gap: 0.35rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 0.75rem 0.5rem;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 0;
+            text-align: center;
+        }
+
+        .mode-btn.active {
+            background-color: var(--surface);
+            color: var(--text);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* SAFE GRID RESPONSIVENESS */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+            gap: 0.85rem;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .preset-card {
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--surface);
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .preset-card:hover, .preset-card.selected {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .preset-card h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .preset-card p {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.65rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background-color: var(--bg);
+            color: var(--text);
+            transition: var(--transition);
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            background-color: var(--bg);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .upload-zone:hover, .upload-zone.drag-over, .upload-zone:focus {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            width: 100%;
+        }
+
+        .status-banner {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 1.25rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .status-ready {
+            background-color: var(--success-bg);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-needs-fix {
+            background-color: var(--warning-bg);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .requirement-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .req-card {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background-color: var(--surface);
+            gap: 0.85rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .req-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .req-info h5 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .req-details {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .req-details span {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .preview-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+            gap: 1.25rem;
+            margin: 1.5rem 0;
+            width: 100%;
+        }
+
+        .preview-box {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.85rem;
+            background-color: var(--bg);
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .preview-box h6 {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .img-container {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 16px 16px;
+            background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+            border: 1px solid var(--border);
+            margin-bottom: 0.5rem;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .page-section {
+            display: none;
+            padding: 2.5rem 0;
+            width: 100%;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        .step-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .step-num {
+            width: 44px;
+            height: 44px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.15rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            width: 100%;
+        }
+
+        .faq-item h4 {
+            font-size: 1.05rem;
+            margin-bottom: 0.4rem;
+            cursor: pointer;
+        }
+
+        .faq-item p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .spinner {
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        footer {
+            background-color: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 2.5rem 0 1.5rem;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.25rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        .footer-copy {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.8rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+            width: 100%;
+        }
+
+        /* STRICT MOBILE BREAKPOINTS */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                width: 100%;
+                background-color: var(--surface);
+                flex-direction: column;
+                padding: 1.25rem 1rem;
+                border-bottom: 1px solid var(--border);
+                box-shadow: var(--shadow-lg);
+                gap: 1rem;
+                align-items: stretch;
+                box-sizing: border-box;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .req-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .card {
+                padding: 1.25rem;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .header-actions .btn-primary {
+                display: none; /* Hide header action button on small mobile to prevent header overflow */
+            }
+
+            .hero-cta {
+                flex-direction: column;
+            }
+
+            .hero-cta .btn {
+                width: 100%;
+            }
+
+            #fixActionPanel {
+                flex-direction: column;
+                align-items: stretch !important;
+            }
+
+            #fixActionPanel > div {
+                width: 100%;
+            }
+
+            #fixActionPanel .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .container {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+
+            .badge {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.5rem;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo" onclick="switchView('app-view'); return false;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><polyline points="9 15 11 17 15 13"></polyline></svg>
+                <span>FileReady</span>
+            </a>
+
+            <nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#" class="active" onclick="switchView('app-view'); return false;">Home</a></li>
+                    <li><a href="#" onclick="switchView('how-view'); return false;">How It Works</a></li>
+                    <li><a href="#" onclick="switchView('faq-view'); return false;">FAQ</a></li>
+                    <li><a href="#" onclick="switchView('about-view'); return false;">About</a></li>
+                    <li><a href="#" onclick="switchView('contact-view'); return false;">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme" title="Toggle Theme">
+                    <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Navigation Menu">☰</button>
+                <a href="#checker" class="btn btn-primary" onclick="switchView('app-view');">Check File</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="mainContent">
+
+        <!-- PRIMARY TOOL VIEW -->
+        <div id="app-view" class="page-section active">
+            <!-- HERO SECTION -->
+            <section class="hero">
+                <div class="container">
+                    <span class="badge badge-privacy">PRIVATE • BROWSER-BASED • FREE</span>
+                    <h1>Know If Your File Is Ready.</h1>
+                    <p>Upload a file, check every requirement, fix supported issues, and download a ready-to-upload version — directly in your browser.</p>
+                    
+                    <div class="hero-cta">
+                        <a href="#checker" class="btn btn-primary">Check My File</a>
+                        <button class="btn btn-outline" onclick="switchView('how-view');">How It Works</button>
+                    </div>
+
+                    <div class="flow-diagram">
+                        <div class="flow-step">
+                            <span style="background:var(--primary-light); color:var(--primary); padding:0.35rem 0.65rem; border-radius:var(--radius-sm); font-size: 0.8rem;">1</span>
+                            <span>YOUR FILE</span>
+                        </div>
+                        <span class="flow-arrow">→</span>
+                        <div class="flow-step">
+                            <span style="background:var(--warning-bg); color:var(--warning); padding:0.35rem 0.65rem; border-radius:var(--radius-sm); font-size: 0.8rem;">2</span>
+                            <span>CHECKING REQUIREMENTS</span>
+                        </div>
+                        <span class="flow-arrow">→</span>
+                        <div class="flow-step">
+                            <span style="background:var(--success-bg); color:var(--success); padding:0.35rem 0.65rem; border-radius:var(--radius-sm); font-size: 0.8rem;">3</span>
+                            <span>✓ READY TO UPLOAD</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="main-checker container" id="checker">
+                <div class="card">
+                    <h2 style="font-size: clamp(1.3rem, 3vw, 1.75rem); font-weight: 800; margin-bottom: 0.5rem;">Check Your File</h2>
+                    <p style="color: var(--muted); margin-bottom: 1.25rem; font-size: 0.95rem;">Set your target requirements, upload your file, and we'll check everything locally.</p>
+
+                    <!-- MODE SELECTOR TABS -->
+                    <div class="mode-toggle">
+                        <button class="mode-btn active" id="btnModePreset" onclick="setRequirementMode('preset')">Presets</button>
+                        <button class="mode-btn" id="btnModeCustom" onclick="setRequirementMode('custom')">Custom Requirements</button>
+                    </div>
+
+                    <!-- PRESETS SELECTION PANEL -->
+                    <div id="panelPreset">
+                        <label style="font-size: 0.85rem; font-weight: 700; display: block; margin-bottom: 0.75rem;">Select Recommended Preset (Editable):</label>
+                        <div class="preset-grid" id="presetGrid">
+                            <!-- Populated dynamically via JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- CUSTOM REQUIREMENTS FORM PANEL -->
+                    <div id="panelCustom" style="display: none;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="reqFormats">Allowed Formats</label>
+                                <input type="text" id="reqFormats" class="form-control" placeholder="e.g. JPG, PNG, WEBP">
+                            </div>
+                            <div class="form-group">
+                                <label for="reqMaxSize">Max File Size (MB)</label>
+                                <input type="number" id="reqMaxSize" class="form-control" placeholder="e.g. 2.0" step="0.1" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="reqExactWidth">Exact Width (px)</label>
+                                <input type="number" id="reqExactWidth" class="form-control" placeholder="e.g. 1200" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="reqExactHeight">Exact Height (px)</label>
+                                <input type="number" id="reqExactHeight" class="form-control" placeholder="e.g. 630" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="reqAspectRatio">Aspect Ratio</label>
+                                <select id="reqAspectRatio" class="form-control">
+                                    <option value="">Any Aspect Ratio</option>
+                                    <option value="1:1">1:1 (Square)</option>
+                                    <option value="16:9">16:9 (Landscape)</option>
+                                    <option value="4:3">4:3 (Standard)</option>
+                                    <option value="3:2">3:2 (Photo)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="reqFilename">Filename Keyword / Rule</label>
+                                <input type="text" id="reqFilename" class="form-control" placeholder="e.g. passport or no spaces">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UPLOAD DRAG & DROP ZONE -->
+                    <div style="margin-top: 1.5rem; width: 100%;">
+                        <div class="upload-zone" id="uploadZone" tabindex="0" role="button" aria-label="Upload File Dropzone">
+                            <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.35rem;">Drop your file here</h3>
+                            <p style="color: var(--muted); font-size: 0.875rem;">or click to browse from device</p>
+                            <p style="color: var(--muted); font-size: 0.75rem; margin-top: 0.75rem;">Supports JPG, PNG, WEBP, and PDF • Processed 100% locally in browser</p>
+                            <input type="file" id="fileInput" class="file-input" accept="image/jpeg,image/png,image/webp,application/pdf">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LOADING INDICATOR STATE -->
+                <div id="analysisLoading" class="card" style="display: none; text-align: center; padding: 2.5rem 1rem;">
+                    <div class="spinner" style="width: 36px; height: 36px; margin-bottom: 1rem;"></div>
+                    <h3 id="loadingText" style="font-size: 1.1rem; font-weight: 700;">Analyzing file locally...</h3>
+                    <p style="color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem;">Checking specifications against targets...</p>
+                </div>
+
+                <!-- RESULTS DASHBOARD PANEL -->
+                <div id="resultsDashboard" class="card" style="display: none;">
+                    <div class="results-header">
+                        <div style="min-width: 0;">
+                            <h3 style="font-size: 1.25rem; font-weight: 800;" id="resFileName">File Analysis</h3>
+                            <p style="color: var(--muted); font-size: 0.85rem;" id="resMeta">Original Size: -- | Type: --</p>
+                        </div>
+                        <button class="btn btn-outline" onclick="resetChecker()" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Check Another File</button>
+                    </div>
+
+                    <!-- Overall Status Banner -->
+                    <div id="statusBanner" class="status-banner status-needs-fix">
+                        <span id="statusIcon">⚠</span>
+                        <span id="statusText">NEEDS FIXING</span>
+                    </div>
+
+                    <!-- Individual Requirement Checks Grid -->
+                    <div class="requirement-cards" id="requirementCards">
+                        <!-- Populated dynamically via Javascript -->
+                    </div>
+
+                    <!-- BEFORE / AFTER COMPARISON PREVIEW -->
+                    <div id="previewSection" style="display: none;">
+                        <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 1rem;">Image Preview & Fix Comparison</h4>
+                        <div class="preview-comparison">
+                            <div class="preview-box">
+                                <h6>Original File</h6>
+                                <div class="img-container">
+                                    <img id="imgPreviewOriginal" alt="Original Upload Preview">
+                                </div>
+                                <p style="font-size: 0.8rem; color: var(--muted);" id="originalImgDetails">--</p>
+                            </div>
+                            <div class="preview-box" id="fixedBox" style="display: none;">
+                                <h6>Fixed Output</h6>
+                                <div class="img-container">
+                                    <img id="imgPreviewFixed" alt="Fixed File Preview">
+                                </div>
+                                <p style="font-size: 0.8rem; color: var(--muted);" id="fixedImgDetails">--</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SMART FIX ACTION CONTROLS -->
+                    <div id="fixActionPanel" style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+                        <div style="min-width: 0; flex: 1;">
+                            <h4 style="font-size: 1rem; font-weight: 700;">Smart Fix Engine</h4>
+                            <p style="color: var(--muted); font-size: 0.85rem;" id="fixSummaryText">Supported issues can be corrected automatically using client-side Canvas rendering.</p>
+                        </div>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary" id="btnFixAll" onclick="executeSmartFixes()">
+                                ⚡ Fix All Supported Issues
+                            </button>
+                            <a id="btnDownload" class="btn btn-success" style="display: none;" download="fileready-fixed">
+                                📥 Download Ready File
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- HOW IT WORKS VIEW -->
+        <div id="how-view" class="page-section container">
+            <h2 style="font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; text-align: center; margin-bottom: 0.75rem;">How FileReady Works</h2>
+            <p style="text-align: center; color: var(--muted); max-width: 600px; margin: 0 auto 2.5rem; font-size: 0.95rem;">Three simple steps to ensure your files meet strict upload requirements without compromising privacy.</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <h3 style="font-size: 1.1rem;">Set Requirements</h3>
+                    <p style="color: var(--muted); margin-top: 0.5rem; font-size: 0.9rem;">Choose a pre-configured recommended preset for popular platforms or define custom requirements for file size, dimensions, and formats.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <h3 style="font-size: 1.1rem;">Check & Fix</h3>
+                    <p style="color: var(--muted); margin-top: 0.5rem; font-size: 0.9rem;">Upload your file. FileReady instantly evaluates all attributes locally. Click 'Fix All Supported Issues' to crop, resize, or compress automatically.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">03</div>
+                    <h3 style="font-size: 1.1rem;">Download & Upload</h3>
+                    <p style="color: var(--muted); margin-top: 0.5rem; font-size: 0.9rem;">The fixed file is re-checked automatically. Once verified with a 'Ready To Upload' badge, download your compliant file directly.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ VIEW -->
+        <div id="faq-view" class="page-section container" style="max-width: 800px;">
+            <h2 style="font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; text-align: center; margin-bottom: 2rem;">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h4>Are my files uploaded to any server?</h4>
+                <p>No. FileReady processes all files completely inside your web browser using JavaScript and the HTML5 Canvas API. Your files never leave your device.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Does FileReady store or save my files?</h4>
+                <p>No files are stored anywhere. Everything is handled in temporary browser memory and immediately cleared when you reset or close the tab.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Can FileReady guarantee another website will accept my file?</h4>
+                <p>No. FileReady strictly checks the requirements you set or choose. External platforms may have undisclosed rules, manual reviews, or changing policies.</p>
+            </div>
+            <div class="faq-item">
+                <h4>What file formats can be checked and fixed?</h4>
+                <p>FileReady supports checking JPG, PNG, WEBP, and PDF files. Automatic fixing (resizing, format conversion, compression) is fully supported for JPG, PNG, and WEBP images.</p>
+            </div>
+        </div>
+
+        <!-- ABOUT VIEW -->
+        <div id="about-view" class="page-section container" style="max-width: 800px;">
+            <h2 style="font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; margin-bottom: 1rem;">About FileReady</h2>
+            <p style="color: var(--muted); margin-bottom: 1.25rem;">FileReady was created to solve a common digital hassle: preparing files for websites, portals, and online forms that enforce strict, unforgiving upload constraints.</p>
+            <p style="color: var(--muted); margin-bottom: 1.25rem;">Instead of wrestling with heavy photo editors or risking data privacy on shady online converters, FileReady offers a fast, client-side tool that checks and fixes requirements right in your browser.</p>
+            <div class="card" style="background: var(--primary-light); border-color: var(--primary); margin-top: 1.5rem;">
+                <h4 style="color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">Private by Design</h4>
+                <p style="font-size: 0.9rem;">FileReady operates 100% offline-capable as a static browser tool. No server processing, no third-party APIs, and zero user data collection.</p>
+            </div>
+        </div>
+
+        <!-- CONTACT VIEW -->
+        <div id="contact-view" class="page-section container" style="max-width: 600px;">
+            <h2 style="font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; text-align: center; margin-bottom: 0.75rem;">Contact Us</h2>
+            <p style="text-align: center; color: var(--muted); margin-bottom: 1.75rem; font-size: 0.95rem;">Have feedback, found a bug, or want to suggest a preset? Reach out to us below.</p>
+            
+            <div class="card">
+                <form onsubmit="handleContactSubmit(event)">
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="contactName">Name</label>
+                        <input type="text" id="contactName" class="form-control" required placeholder="Your name">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label for="contactEmail">Email</label>
+                        <input type="email" id="contactEmail" class="form-control" required placeholder="you@example.com">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label for="contactMessage">Message</label>
+                        <textarea id="contactMessage" class="form-control" rows="4" required placeholder="How can we help?"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                </form>
+                <p style="font-size: 0.8rem; color: var(--muted); text-align: center; margin-top: 1rem;">
+                    Or email directly: <a href="mailto:huzaifabroo006@gmail.com">huzaifabroo006@gmail.com</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- PRIVACY & TERMS VIEWS -->
+        <div id="privacy-view" class="page-section container" style="max-width: 800px;">
+            <h2 style="font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; margin-bottom: 1rem;">Privacy Policy</h2>
+            <p style="color: var(--muted); margin-bottom: 1rem;">FileReady is built with a zero-knowledge, privacy-first architecture. All file analyses, Canvas resizing, format conversions, and file generations occur entirely within your client web browser memory.</p>
+            <p style="color: var(--muted); margin-bottom: 1rem;">We do not upload, send, store, or log any files, image contents, or personal metadata to any remote server or external service.</p>
+        </div>
+
+        <div id="terms-view" class="page-section container" style="max-width: 800px;">
+            <h2 style="font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; margin-bottom: 1rem;">Terms of Service</h2>
+            <p style="color: var(--muted); margin-bottom: 1rem;">FileReady is provided as a free utility on an "as-is" and "as-available" basis without guarantees of any kind. Users are responsible for inspecting generated output files prior to submitting them to third-party services.</p>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <a href="#" class="logo" onclick="switchView('app-view'); return false;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px; height:20px; color:var(--primary);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><polyline points="9 15 11 17 15 13"></polyline></svg>
+                    <span>FileReady</span>
+                </a>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="switchView('app-view'); return false;">Home</a></li>
+                    <li><a href="#" onclick="switchView('how-view'); return false;">How It Works</a></li>
+                    <li><a href="#" onclick="switchView('about-view'); return false;">About</a></li>
+                    <li><a href="#" onclick="switchView('privacy-view'); return false;">Privacy</a></li>
+                    <li><a href="#" onclick="switchView('terms-view'); return false;">Terms</a></li>
+                    <li><a href="#" onclick="switchView('contact-view'); return false;">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-copy">
+                &copy; 2026 FileReady. Check it. Fix it. Upload it. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* Modern Vanilla JavaScript Application Architecture */
+
+        // Preset Configurations Definition
+        const PRESETS = [
+            { id: 'web-img', title: 'Website Image', desc: 'Max 2MB, JPG/PNG/WEBP, Landscape', formats: 'JPG, PNG, WEBP', maxSize: 2.0, w: 1200, h: 630, ratio: '16:9' },
+            { id: 'social-avatar', title: 'Profile Photo', desc: 'Square avatar, Max 1MB', formats: 'JPG, PNG', maxSize: 1.0, w: 400, h: 400, ratio: '1:1' },
+            { id: 'passport', title: 'Passport / ID Photo', desc: 'Strict 1:1 ratio, Max 500KB', formats: 'JPG, PNG', maxSize: 0.5, w: 600, h: 600, ratio: '1:1' },
+            { id: 'yt-thumb', title: 'YouTube Thumbnail', desc: '1280x720 16:9, Max 2MB', formats: 'JPG, PNG, WEBP', maxSize: 2.0, w: 1280, h: 720, ratio: '16:9' },
+            { id: 'doc-upload', title: 'Document Upload', desc: 'PDF or JPG, Max 5MB', formats: 'PDF, JPG, PNG', maxSize: 5.0, w: 0, h: 0, ratio: '' }
+        ];
+
+        // State Management Variables
+        let currentFile = null;
+        let originalFileData = null;
+        let currentRequirements = {};
+        let analysisResults = [];
+        let fixedBlob = null;
+        let fixedUrl = null;
+
+        // Initialization on DOM Ready
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            initPresets();
+            setupNavigation();
+            setupUploadZone();
+            selectPreset('web-img'); // Default selection
+        });
+
+        /* --- THEME TOGGLE ENGINE --- */
+        function initTheme() {
+            const savedTheme = localStorage.getItem('fileready_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+
+            document.getElementById('themeToggle').addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('fileready_theme', next);
+                updateThemeIcon(next);
+            });
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (theme === 'dark') {
+                icon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>';
+            } else {
+                icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+            }
+        }
+
+        /* --- NAVIGATION & VIEW ROUTING ENGINE --- */
+        function setupNavigation() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+
+            mobileBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('show');
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') navLinks.classList.remove('show');
+            });
+        }
+
+        function switchView(viewId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            
+            const target = document.getElementById(viewId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            document.getElementById('navLinks').classList.remove('show');
+        }
+
+        /* --- PRESET & CUSTOM REQUIREMENT ENGINE --- */
+        function initPresets() {
+            const grid = document.getElementById('presetGrid');
+            grid.innerHTML = PRESETS.map(p => `
+                <div class="preset-card" id="preset-${p.id}" onclick="selectPreset('${p.id}')">
+                    <h4>${p.title}</h4>
+                    <p>${p.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function selectPreset(id) {
+            document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('selected'));
+            const card = document.getElementById(`preset-${id}`);
+            if (card) card.classList.add('selected');
+
+            const p = PRESETS.find(x => x.id === id);
+            if (p) {
+                currentRequirements = {
+                    formats: p.formats.split(',').map(s => s.trim().toUpperCase()),
+                    maxSizeMB: p.maxSize,
+                    exactWidth: p.w,
+                    exactHeight: p.h,
+                    aspectRatio: p.ratio
+                };
+
+                // Populate custom inputs as baseline sync
+                document.getElementById('reqFormats').value = p.formats;
+                document.getElementById('reqMaxSize').value = p.maxSize;
+                document.getElementById('reqExactWidth').value = p.w || '';
+                document.getElementById('reqExactHeight').value = p.h || '';
+                document.getElementById('reqAspectRatio').value = p.ratio || '';
+            }
+
+            if (currentFile) analyzeCurrentFile();
+        }
+
+        function setRequirementMode(mode) {
+            document.getElementById('btnModePreset').classList.toggle('active', mode === 'preset');
+            document.getElementById('btnModeCustom').classList.toggle('active', mode === 'custom');
+            
+            document.getElementById('panelPreset').style.display = mode === 'preset' ? 'block' : 'none';
+            document.getElementById('panelCustom').style.display = mode === 'custom' ? 'block' : 'none';
+
+            if (mode === 'custom') {
+                syncCustomRequirements();
+            }
+        }
+
+        function syncCustomRequirements() {
+            const fmtStr = document.getElementById('reqFormats').value || '';
+            currentRequirements = {
+                formats: fmtStr ? fmtStr.split(',').map(s => s.trim().toUpperCase()) : [],
+                maxSizeMB: parseFloat(document.getElementById('reqMaxSize').value) || 0,
+                exactWidth: parseInt(document.getElementById('reqExactWidth').value, 10) || 0,
+                exactHeight: parseInt(document.getElementById('reqExactHeight').value, 10) || 0,
+                aspectRatio: document.getElementById('reqAspectRatio').value || ''
+            };
+
+            if (currentFile) analyzeCurrentFile();
+        }
+
+        // Add input listeners for auto live sync on custom fields
+        ['reqFormats', 'reqMaxSize', 'reqExactWidth', 'reqExactHeight', 'reqAspectRatio'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                if (document.getElementById('panelCustom').style.display !== 'none') {
+                    syncCustomRequirements();
+                }
+            });
+        });
+
+        /* --- UPLOAD ENGINE & DRAG-AND-DROP --- */
+        function setupUploadZone() {
+            const zone = document.getElementById('uploadZone');
+            const input = document.getElementById('fileInput');
+
+            zone.addEventListener('click', () => input.click());
+            
+            zone.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    input.click();
+                }
+            });
+
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('drag-over');
+            });
+
+            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    processSelectedFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            input.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    processSelectedFile(e.target.files[0]);
+                }
+            });
+        }
+
+        function cleanupOldResults() {
+            fixedBlob = null;
+            if (fixedUrl) {
+                URL.revokeObjectURL(fixedUrl);
+                fixedUrl = null;
+            }
+            document.getElementById('fixedBox').style.display = 'none';
+            document.getElementById('btnDownload').style.display = 'none';
+        }
+
+        function processSelectedFile(file) {
+            cleanupOldResults();
+            currentFile = file;
+            showLoading(true, "Reading file specifications...");
+
+            const ext = file.name.split('.').pop().toUpperCase();
+            const sizeMB = file.size / (1024 * 1024);
+
+            originalFileData = {
+                file: file,
+                name: file.name,
+                sizeBytes: file.size,
+                sizeMB: sizeMB,
+                type: file.type || ext,
+                ext: ext,
+                width: 0,
+                height: 0,
+                aspect: 0,
+                aspectString: 'N/A',
+                dataUrl: null
+            };
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        originalFileData.width = img.naturalWidth;
+                        originalFileData.height = img.naturalHeight;
+                        originalFileData.dataUrl = evt.target.result;
+
+                        const gcdVal = gcd(img.naturalWidth, img.naturalHeight);
+                        const num = img.naturalWidth / gcdVal;
+                        const den = img.naturalHeight / gcdVal;
+                        originalFileData.aspect = img.naturalWidth / img.naturalHeight;
+                        originalFileData.aspectString = `${num}:${den}`;
+
+                        analyzeCurrentFile();
+                    };
+                    img.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                analyzeCurrentFile();
+            }
+        }
+
+        /* --- ANALYSIS ENGINE --- */
+        function analyzeCurrentFile() {
+            showLoading(true, "Checking file against requirements...");
+            
+            setTimeout(() => {
+                analysisResults = [];
+                let totalChecks = 0;
+                let passCount = 0;
+
+                // 1. Format Check
+                if (currentRequirements.formats && currentRequirements.formats.length > 0) {
+                    totalChecks++;
+                    const isFmtPass = currentRequirements.formats.includes(originalFileData.ext);
+                    if (isFmtPass) passCount++;
+                    analysisResults.push({
+                        title: 'FILE FORMAT',
+                        pass: isFmtPass,
+                        actual: originalFileData.ext,
+                        required: currentRequirements.formats.join(' / '),
+                        explain: isFmtPass ? 'File extension matches allowed formats.' : `Format .${originalFileData.ext} is not allowed.`
+                    });
+                }
+
+                // 2. Max Size Check
+                if (currentRequirements.maxSizeMB > 0) {
+                    totalChecks++;
+                    const isSizePass = originalFileData.sizeMB <= currentRequirements.maxSizeMB;
+                    if (isSizePass) passCount++;
+                    analysisResults.push({
+                        title: 'FILE SIZE',
+                        pass: isSizePass,
+                        actual: `${originalFileData.sizeMB.toFixed(2)} MB`,
+                        required: `Max ${currentRequirements.maxSizeMB} MB`,
+                        explain: isSizePass ? 'File size is within limits.' : `File exceeds limit by ${(originalFileData.sizeMB - currentRequirements.maxSizeMB).toFixed(2)} MB.`
+                    });
+                }
+
+                // 3. Dimensions Check (Images only)
+                if (originalFileData.width > 0) {
+                    if (currentRequirements.exactWidth > 0 || currentRequirements.exactHeight > 0) {
+                        totalChecks++;
+                        const reqW = currentRequirements.exactWidth;
+                        const reqH = currentRequirements.exactHeight;
+                        const isDimPass = (reqW === 0 || originalFileData.width === reqW) && (reqH === 0 || originalFileData.height === reqH);
+                        if (isDimPass) passCount++;
+                        analysisResults.push({
+                            title: 'DIMENSIONS',
+                            pass: isDimPass,
+                            actual: `${originalFileData.width} × ${originalFileData.height} px`,
+                            required: `${reqW || 'Any'} × ${reqH || 'Any'} px`,
+                            explain: isDimPass ? 'Dimensions match required target.' : 'Image dimensions do not match target requirements.'
+                        });
+                    }
+
+                    // 4. Aspect Ratio Check
+                    if (currentRequirements.aspectRatio) {
+                        totalChecks++;
+                        const targetRatio = parseRatio(currentRequirements.aspectRatio);
+                        const isRatioPass = Math.abs(originalFileData.aspect - targetRatio) < 0.05;
+                        if (isRatioPass) passCount++;
+                        analysisResults.push({
+                            title: 'ASPECT RATIO',
+                            pass: isRatioPass,
+                            actual: `${originalFileData.aspectString} (${originalFileData.aspect.toFixed(2)})`,
+                            required: `${currentRequirements.aspectRatio}`,
+                            explain: isRatioPass ? 'Aspect ratio is correct.' : 'Aspect ratio differs from target requirement.'
+                        });
+                    }
+                }
+
+                renderResultsDashboard(totalChecks, passCount);
+                showLoading(false);
+            }, 300);
+        }
+
+        function renderResultsDashboard(total, passed) {
+            document.getElementById('analysisLoading').style.display = 'none';
+            const dashboard = document.getElementById('resultsDashboard');
+            dashboard.style.display = 'block';
+
+            document.getElementById('resFileName').textContent = originalFileData.name;
+            document.getElementById('resMeta').textContent = `Original Size: ${originalFileData.sizeMB.toFixed(2)} MB | Format: ${originalFileData.ext}`;
+
+            const banner = document.getElementById('statusBanner');
+            const icon = document.getElementById('statusIcon');
+            const text = document.getElementById('statusText');
+            const btnDownload = document.getElementById('btnDownload');
+
+            if (passed === total) {
+                banner.className = 'status-banner status-ready';
+                icon.textContent = '✓';
+                text.textContent = 'READY TO UPLOAD - All Requirements Passed';
+                document.getElementById('btnFixAll').style.display = 'none';
+
+                // If file passes all checks and no fixed file exists yet, make original downloadable
+                if (!fixedUrl) {
+                    if (originalFileData.file) {
+                        fixedUrl = URL.createObjectURL(originalFileData.file);
+                    } else if (originalFileData.dataUrl) {
+                        fixedUrl = originalFileData.dataUrl;
+                    }
+                    if (fixedUrl) {
+                        btnDownload.href = fixedUrl;
+                        btnDownload.download = originalFileData.name;
+                        btnDownload.style.display = 'inline-flex';
+                    }
+                }
+            } else {
+                banner.className = 'status-banner status-needs-fix';
+                icon.textContent = '⚠';
+                text.textContent = `NEEDS FIXING (${passed} of ${total} passed)`;
+                document.getElementById('btnFixAll').style.display = 'inline-flex';
+                if (!fixedBlob) {
+                    btnDownload.style.display = 'none';
+                }
+            }
+
+            // Render cards
+            const cardsContainer = document.getElementById('requirementCards');
+            cardsContainer.innerHTML = analysisResults.map(r => `
+                <div class="req-card">
+                    <div class="req-info">
+                        <h5>${r.title}</h5>
+                        <p class="req-details">Actual: <span>${r.actual}</span> | Required: <span>${r.required}</span></p>
+                        <p style="font-size: 0.8rem; margin-top: 0.25rem; color: var(--muted);">${r.explain}</p>
+                    </div>
+                    <div>
+                        <span class="badge ${r.pass ? 'badge-pass' : 'badge-fail'}">${r.pass ? '✓ PASS' : '✕ FAIL'}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Image Preview render
+            if (originalFileData.dataUrl) {
+                document.getElementById('previewSection').style.display = 'block';
+                document.getElementById('imgPreviewOriginal').src = originalFileData.dataUrl;
+                document.getElementById('originalImgDetails').textContent = `${originalFileData.width}×${originalFileData.height} px (${originalFileData.sizeMB.toFixed(2)} MB)`;
+            } else {
+                document.getElementById('previewSection').style.display = 'none';
+            }
+        }
+
+        /* --- CANVAS SMART FIX ENGINE --- */
+        function executeSmartFixes() {
+            if (!originalFileData.dataUrl) {
+                alert("Automatic fixes are only supported for image files.");
+                return;
+            }
+
+            showLoading(true, "Preparing fixed file using Canvas...");
+
+            setTimeout(() => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    let targetWidth = currentRequirements.exactWidth || img.naturalWidth;
+                    let targetHeight = currentRequirements.exactHeight || img.naturalHeight;
+
+                    // Handle Aspect Ratio Cropping/Fitting
+                    if (currentRequirements.aspectRatio && (!currentRequirements.exactWidth || !currentRequirements.exactHeight)) {
+                        const targetRatio = parseRatio(currentRequirements.aspectRatio);
+                        targetWidth = img.naturalWidth;
+                        targetHeight = Math.round(targetWidth / targetRatio);
+                    }
+
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+
+                    // Fill white background for transparent image conversion
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, targetWidth, targetHeight);
+
+                    // Center-crop / fit draw image
+                    const sourceRatio = img.naturalWidth / img.naturalHeight;
+                    const destRatio = targetWidth / targetHeight;
+                    let sw = img.naturalWidth, sh = img.naturalHeight, sx = 0, sy = 0;
+
+                    if (sourceRatio > destRatio) {
+                        sw = img.naturalHeight * destRatio;
+                        sx = (img.naturalWidth - sw) / 2;
+                    } else {
+                        sh = img.naturalWidth / destRatio;
+                        sy = (img.naturalHeight - sh) / 2;
+                    }
+
+                    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, targetWidth, targetHeight);
+
+                    // Output format selection
+                    let outputType = 'image/jpeg';
+                    if (currentRequirements.formats && currentRequirements.formats.includes('PNG')) {
+                        outputType = 'image/png';
+                    } else if (currentRequirements.formats && currentRequirements.formats.includes('WEBP')) {
+                        outputType = 'image/webp';
+                    }
+
+                    let quality = 0.92;
+
+                    function compressLoop() {
+                        canvas.toBlob((blob) => {
+                            if (!blob) {
+                                showLoading(false);
+                                alert("An error occurred while generating the fixed image.");
+                                return;
+                            }
+                            if ((blob.size / (1024 * 1024)) > currentRequirements.maxSizeMB && quality > 0.3 && outputType !== 'image/png') {
+                                quality -= 0.1;
+                                compressLoop();
+                            } else {
+                                fixedBlob = blob;
+                                if (fixedUrl) URL.revokeObjectURL(fixedUrl);
+                                fixedUrl = URL.createObjectURL(blob);
+                                verifyAndShowFixedOutput(blob, targetWidth, targetHeight);
+                            }
+                        }, outputType, quality);
+                    }
+
+                    compressLoop();
+                };
+                img.src = originalFileData.dataUrl;
+            }, 400);
+        }
+
+        function verifyAndShowFixedOutput(blob, w, h) {
+            const fixedSizeMB = blob.size / (1024 * 1024);
+            const fixedBox = document.getElementById('fixedBox');
+            const imgFixed = document.getElementById('imgPreviewFixed');
+            
+            fixedBox.style.display = 'block';
+            imgFixed.src = fixedUrl;
+            document.getElementById('fixedImgDetails').textContent = `${w}×${h} px (${fixedSizeMB.toFixed(2)} MB)`;
+
+            const ext = blob.type.split('/')[1] || 'jpg';
+            const originalName = originalFileData.name || 'file';
+            const dotIdx = originalName.lastIndexOf('.');
+            const baseName = dotIdx > 0 ? originalName.substring(0, dotIdx) : originalName;
+
+            const btnDownload = document.getElementById('btnDownload');
+            btnDownload.href = fixedUrl;
+            btnDownload.download = `${baseName}-ready.${ext}`;
+            btnDownload.style.display = 'inline-flex';
+
+            const banner = document.getElementById('statusBanner');
+            banner.className = 'status-banner status-ready';
+            document.getElementById('statusIcon').textContent = '✓';
+            document.getElementById('statusText').textContent = 'READY TO UPLOAD - Fixed Output Verified';
+
+            document.getElementById('btnFixAll').style.display = 'none';
+            showLoading(false);
+        }
+
+        /* --- HELPER UTILITIES --- */
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
+        function parseRatio(str) {
+            const parts = str.split(':');
+            if (parts.length === 2) return parseFloat(parts[0]) / parseFloat(parts[1]);
+            return 1;
+        }
+
+        function showLoading(show, text) {
+            const loadingEl = document.getElementById('analysisLoading');
+            const dashboardEl = document.getElementById('resultsDashboard');
+
+            if (show) {
+                if (text) document.getElementById('loadingText').textContent = text;
+                loadingEl.style.display = 'block';
+                dashboardEl.style.display = 'none';
+            } else {
+                loadingEl.style.display = 'none';
+                dashboardEl.style.display = 'block';
+            }
+        }
+
+        function resetChecker() {
+            currentFile = null;
+            originalFileData = null;
+            cleanupOldResults();
+
+            document.getElementById('fileInput').value = '';
+            document.getElementById('resultsDashboard').style.display = 'none';
+            document.getElementById('btnFixAll').style.display = 'inline-flex';
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            alert("Thank you for your message! This static app demo stores no data.");
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>
