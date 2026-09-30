@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: YOUR_WEBSITE_URL/sitemap.xml
+Sitemap: https://huzaifabroo108-bit.github.io/photo-Checker-/sitemap.xml
